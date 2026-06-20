@@ -134,8 +134,7 @@ export function Cart({
                           ${(item.price * item.quantity).toFixed(2)}
                         </div>
                       </div>
-
-                      {/* Quantity & Actions */}
+      {/* Quantity & Actions */}
                       <div className="flex flex-col items-end justify-between">
                         {/* Quantity Selector */}
                         <div className="flex items-center gap-2 rounded-lg border border-border bg-background p-1">
@@ -148,9 +147,18 @@ export function Cart({
                           >
                             <Minus className="h-3.5 w-3.5 text-foreground" />
                           </button>
-                          <span className="w-6 text-center text-sm font-semibold text-foreground">
-                            {item.quantity}
-                          </span>
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value, 10);
+                              if (!isNaN(value) && value > 0) {
+                                onUpdateQuantity(item.id, value);
+                              }
+                            }}
+                            className="w-12 text-center text-sm font-semibold text-foreground bg-transparent border-0 focus:outline-none focus:ring-2 focus:ring-accent/50 rounded p-0.5"
+                          />
                           <button
                             onClick={() =>
                               onUpdateQuantity(item.id, item.quantity + 1)
