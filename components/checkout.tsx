@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Check } from 'lucide-react';
 import Image from 'next/image';
 
+import { wholeNumberFormatter } from '@/lib/utils';
+
 interface CartItem {
   id: string;
   name: string;
@@ -354,13 +356,13 @@ export function Checkout({ items, onBackToCart, onOrderComplete }: CheckoutProps
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-foreground/80">Subtotal</span>
                   <span className="text-sm font-medium text-foreground">
-                    ${subtotal.toFixed(2)}
+                    {wholeNumberFormatter.format(subtotal)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-foreground/80">Tax (8%)</span>
                   <span className="text-sm font-medium text-foreground">
-                    ${tax.toFixed(2)}
+                    {wholeNumberFormatter.format(tax)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -372,7 +374,7 @@ export function Checkout({ items, onBackToCart, onOrderComplete }: CheckoutProps
               <div className="flex justify-between items-center mb-6">
                 <span className="text-base font-semibold text-foreground">Total</span>
                 <span className="text-2xl font-bold text-accent">
-                  ${total.toFixed(2)}
+                   {wholeNumberFormatter.format(total)}
                 </span>
               </div>
 

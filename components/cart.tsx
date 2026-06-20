@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { ArrowLeft, Minus, Plus, Trash2, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { getAllProducts } from '@/lib/products';
-
+import { wholeNumberFormatter } from '@/lib/utils';
 interface CartItem {
   id: string;
   name: string;
@@ -131,10 +131,10 @@ export function Cart({
 
                         {/* Price */}
                         <div className="text-base font-semibold text-accent">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {wholeNumberFormatter.format(item.price * item.quantity)}
                         </div>
                       </div>
-      {/* Quantity & Actions */}
+                      {/* Quantity & Actions */}
                       <div className="flex flex-col items-end justify-between">
                         {/* Quantity Selector */}
                         <div className="flex items-center gap-2 rounded-lg border border-border bg-background p-1">
@@ -210,7 +210,7 @@ export function Cart({
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-foreground/80">Subtotal</span>
                     <span className="text-sm font-medium text-foreground">
-                      ${subtotal.toFixed(2)}
+                      {wholeNumberFormatter.format(subtotal)}
                     </span>
                   </div>
 
@@ -218,7 +218,7 @@ export function Cart({
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-foreground/80">Tax (8%)</span>
                     <span className="text-sm font-medium text-foreground">
-                      ${tax.toFixed(2)}
+                      {wholeNumberFormatter.format(tax)}
                     </span>
                   </div>
 
@@ -233,7 +233,7 @@ export function Cart({
                 <div className="mb-6 flex justify-between items-center">
                   <span className="text-base font-semibold text-foreground">Total</span>
                   <span className="text-2xl font-bold text-accent">
-                    ${total.toFixed(2)}
+                    {wholeNumberFormatter.format(total)}
                   </span>
                 </div>
 
@@ -281,7 +281,7 @@ export function Cart({
                             {product.name}
                           </p>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            ${product.price.toFixed(2)}
+                            {wholeNumberFormatter.format(product.price)}
                           </p>
                           {product.stock === 0 ? (
                             <div className="flex items-center gap-1 mt-1.5">

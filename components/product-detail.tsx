@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, Minus, Plus, ArrowLeft, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
 import { productsDatabase } from '@/lib/products';
+import { wholeNumberFormatter } from '@/lib/utils';
 
 interface ProductDetailProps {
   productId: string;
@@ -96,7 +97,7 @@ export function ProductDetail({ productId, onAddToCart, cartCount, onViewCart, o
               </p>
               <div className="mb-8">
                 <div className="text-5xl font-semibold text-accent">
-                  ${product.price}
+                  {wholeNumberFormatter.format(product.price)}
                 </div>
               </div>
             </div>

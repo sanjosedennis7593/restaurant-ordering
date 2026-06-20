@@ -6,6 +6,8 @@ import { ShoppingCart, Plus, Search, ChevronDown, AlertCircle } from 'lucide-rea
 import Image from 'next/image';
 import { getAllProducts, Product } from '@/lib/products';
 
+import { wholeNumberFormatter } from '@/lib/utils';
+
 interface ProductListProps {
   onSelectProduct: (productId: string) => void;
   onAddToCart: (product: Product, quantity: number) => void;
@@ -44,7 +46,7 @@ export function ProductList({
   // Group products by category
   const groupedProducts = useMemo(() => {
     const groups: { [key: string]: Product[] } = {};
-    
+
     filteredAndSortedProducts.forEach((product) => {
       if (!groups[product.category]) {
         groups[product.category] = [];
@@ -265,18 +267,17 @@ function ProductCard({
         <div className="flex items-end justify-between gap-2">
           <div>
             <p className="text-xs text-muted-foreground">Price</p>
-            <p className="text-xl font-bold text-foreground">${product.price.toFixed(2)}</p>
+            <p className="text-xl font-bold text-foreground">{wholeNumberFormatter.format(product.price)}</p>
           </div>
           <button
             onClick={(e) => onQuickAdd(e, product)}
             disabled={addingToCart === product.id || product.stock === 0}
-            className={`flex-shrink-0 rounded-lg p-2 transition-all ${
-              addingToCart === product.id
+            className={`flex-shrink-0 rounded-lg p-2 transition-all ${addingToCart === product.id
                 ? 'bg-green-100 text-green-700'
                 : product.stock === 0
-                ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                : 'bg-accent text-accent-foreground hover:bg-accent/90'
-            }`}
+                  ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                  : 'bg-accent text-accent-foreground hover:bg-accent/90'
+              }`}
           >
             <Plus size={20} />
           </button>
