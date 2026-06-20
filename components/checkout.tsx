@@ -345,7 +345,7 @@ export function Checkout({ items, onBackToCart, onOrderComplete }: CheckoutProps
                         Qty: {item.quantity}
                       </p>
                       <p className="text-sm font-semibold text-accent mt-1">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {wholeNumberFormatter.format(item.price * item.quantity)}
                       </p>
                     </div>
                   </div>
