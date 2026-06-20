@@ -1,8 +1,10 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react';
+import { useMemo } from 'react';
+import { ArrowLeft, Minus, Plus, Trash2, AlertCircle } from 'lucide-react';
 import Image from 'next/image';
+import { getAllProducts } from '@/lib/products';
 
 interface CartItem {
   id: string;
@@ -19,6 +21,7 @@ interface CartProps {
   onRemoveItem: (productId: string) => void;
   onContinueShopping: () => void;
   onProceedToCheckout: () => void;
+  onAddToCart: (product: any, quantity: number) => void;
 }
 
 export function Cart({
@@ -26,11 +29,19 @@ export function Cart({
   onUpdateQuantity,
   onRemoveItem,
   onContinueShopping,
-  onProceedToCheckout
+  onProceedToCheckout,
+  onAddToCart,
 }: CartProps) {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + tax;
+
+  // Get related products (all products except those in cart)
+  const relatedProducts = useMemo(() => {
+    const allProducts = getAllProducts();
+    const cartIds = items.map((item) => item.id);
+    return allProducts.filter((p) => !cartIds.includes(p.id)).slice(0, 6);
+  }, [items]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -177,6 +188,8 @@ export function Cart({
               </Button>
             </div>
 
+
+
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-20 rounded-lg border border-border bg-white p-8">
@@ -233,6 +246,67 @@ export function Cart({
             </div>
           </div>
         )}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-1 mt-20">
+          {/* Related Products */}
+          <div className="lg:col-span-1">
+            <div className="rounded-lg border border-border bg-white p-6">
+              <h3 className="text-sm font-semibold text-foreground mb-4">Add More Items</h3>
+              <div className="space-y-3">
+                {relatedProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className="p-3 rounded-lg border border-border/50 hover:border-border/80 transition-all group"
+                  >
+                    <div className="flex gap-2.5 items-start justify-between">
+                      <div className="flex gap-2.5 items-start flex-1 min-w-0">
+                        <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded bg-secondary">
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                            sizes="48px"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-foreground line-clamp-2">
+                            {product.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            ${product.price.toFixed(2)}
+                          </p>
+                          {product.stock === 0 ? (
+                            <div className="flex items-center gap-1 mt-1.5">
+                              <AlertCircle className="h-3 w-3 text-destructive" />
+                              <span className="text-xs font-medium text-destructive">Out of Stock</span>
+                            </div>
+                          ) : product.stock < 5 ? (
+                            <span className="text-xs text-amber-600 font-medium mt-1.5 block">
+                              Only {product.stock} left
+                            </span>
+                          ) : (
+                            <span className="text-xs text-muted-foreground mt-1.5 block">
+                              {product.stock} in stock
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => onAddToCart(product, 1)}
+                        disabled={product.stock === 0}
+                        className="flex-shrink-0 ml-2 px-2.5 py-1.5 text-xs font-medium rounded-md transition-colors bg-accent text-accent-foreground hover:bg-accent/90 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
   );

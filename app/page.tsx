@@ -84,6 +84,7 @@ export default function Home() {
           onRemoveItem={handleRemoveItem}
           onContinueShopping={() => setCurrentPage('list')}
           onProceedToCheckout={handleProceedToCheckout}
+          onAddToCart={handleAddToCart}
         />
       )}
       {currentPage === 'checkout' && (
