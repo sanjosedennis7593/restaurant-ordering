@@ -312,7 +312,7 @@ export function Checkout({ items, onBackToCart, onOrderComplete }: CheckoutProps
                 size="lg"
                 className="w-full bg-accent invisible sm:visible hover:bg-accent/90 text-accent-foreground font-semibold rounded-lg h-12"
               >
-                {isSubmitting ? 'Processing...' : `Complete Order - $${total.toFixed(2)}`}
+                {isSubmitting ? 'Processing...' : `Complete Order - ${wholeNumberFormatter.format(total)}`}
               </Button>
             </form>
           </div>
